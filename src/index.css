@@ -14,7 +14,7 @@ html, body {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: black;
+  background: #272b30;
   display: flex;
   justify-content: center;
   align-items: center;
