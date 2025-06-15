@@ -66,7 +66,7 @@
 
 <script>
   const pointSound = new Audio('ding.mp3');
-  pointSound.volume = 0.3; // 30% volume (0.0 to 1.0)
+  pointSound.volume = 0.3; 
 
   const flapSound = new Audio('flap.mp3');
   flapSound.volume = 0.25; 
@@ -105,13 +105,13 @@ function applyGravity() {
   const bbox = bird.getBBox();
   const birdHeight = bbox.height * scale;
 
-  // ✅ Collision with bottom
+  // Collision with bottom
   if (y + birdHeight > height) {
     y = height - birdHeight;
     velocityY = 0;
   }
 
-  // ✅ Clamp to ceiling
+  // Clamp to ceiling
   if (y < 0) {
     y = 0;
     velocityY = 0;
@@ -187,25 +187,25 @@ function restartGame() {
   cancelAnimationFrame(gravityId);
   cancelAnimationFrame(moveId);
   cancelAnimationFrame(movementId);
-  // 1) reset the score
+  // reset the score
   score = 0;
   scoreDisplay.textContent = 'Score: ' + score;
 
-  // 2) reset bird state
+  // reset bird
   x = 100;
   y = 100;
   velocityY = 0;
   movingLeft = false;
   movingRight = false;
 
-  // 3) reset pipes (and the score‐line, if you’re still using it)
+  // reset pipes
   pipes.forEach(pipe => {
     pipe.botEl.setAttribute('x', pipe.resetX);
     pipe.topEl.setAttribute('x', pipe.resetX);
     randomizePipe(pipe);
   });
 
-  // 5) un‐pause and start the loops again
+  // unpause
   paused = false;
 gravityId = requestAnimationFrame(applyGravity);
 movementId = requestAnimationFrame(updateMovement);
@@ -213,8 +213,8 @@ moveId = requestAnimationFrame(moveObstacles);
 }
 
 const NUM_PIPES = 6;
-const PIPE_SPACING = 300; // consistent horizontal spacing
-const PIPE_START_X = 900; // first pipe just off-screen
+const PIPE_SPACING = 300; 
+const PIPE_START_X = 900; 
 
 const pipes = [];
 
@@ -233,9 +233,9 @@ for (let i = 0; i < NUM_PIPES; i++) {
 function createPipeImage(type) {
   const img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
   img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'pipe.png');
-  img.setAttribute('width', '80');  // wider pipes
-  img.setAttribute('height', '400'); // image height
-  img.setAttribute('y', type === 'top' ? '0' : '200'); // dummy value, will be overridden
+  img.setAttribute('width', '80');  
+  img.setAttribute('height', '400'); 
+  img.setAttribute('y', type === 'top' ? '0' : '200'); 
   img.setAttribute('preserveAspectRatio', 'xMidYMin slice');
   document.getElementById('game').appendChild(img);
   return img;
@@ -266,14 +266,14 @@ function randomizePipe(pipe) {
 
   const pipeW = +pipe.botEl.getAttribute('width');
 
-  // Set bottom pipe position
+  // bottom pipe position
   const bottomY = topH + gap;
   pipe.botEl.setAttribute('y', bottomY);
   pipe.botEl.setAttribute('height', height - bottomY);
-  pipe.botEl.setAttribute('transform', ''); // ensure no transform
+  pipe.botEl.setAttribute('transform', '');
 
-  // Set top pipe flipped
-  pipe.topEl.setAttribute('y', 0); // reset y
+  // top pipe flipped
+  pipe.topEl.setAttribute('y', 0);
   pipe.topEl.setAttribute('height', topH);
   pipe.topEl.setAttribute('transform', `translate(0, ${topH}) scale(1, -1)`);
 
@@ -308,11 +308,11 @@ function moveObstacles() {
 }
 
 const localHitboxes = [
-  // head
+
   { x: 400, y:  60, w:  80, h:  80 },
-  // body
+
   { x: 280, y: 260, w: 180, h: 140 },
-  // tail
+
   { x: 200, y: 340, w: 140, h:  90 },
 
   { x: 10, y: 320, w: 140, h:  90 },
@@ -324,15 +324,14 @@ const localHitboxes = [
   { x: 280, y: 140, w: 120, h:  90 },
 
   { x: 340, y: 10, w: 100, h:  90 },
-  // feet
+
   { x: 320, y: 350, w: 100, h:  80 }
 ];
 
 function checkCollision() {
-  // remove old debug boxes
+
   document.querySelectorAll('.hitbox').forEach(n => n.remove());
 
-  // helper: AABB overlap
   function overlaps(a, b) {
     return a.x < b.x + b.w &&
            a.x + a.w > b.x &&
@@ -340,28 +339,17 @@ function checkCollision() {
            a.y + a.h > b.y;
   }
 
-  // generate all transformed bird hitboxes
+  // generate hitboxes
   const worldBoxes = localHitboxes.map(hb => {
     const wx = x + hb.x * scale;
     const wy = y + hb.y * scale;
     const ww = hb.w * scale;
     const wh = hb.h * scale;
 
-    // draw debug rect (optional)
-    const dbg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    dbg.setAttribute('class', 'hitbox');
-    dbg.setAttribute('x', wx);
-    dbg.setAttribute('y', wy);
-    dbg.setAttribute('width', ww);
-    dbg.setAttribute('height', wh);
-    dbg.setAttribute('stroke', 'transparent');
-    dbg.setAttribute('fill', 'none');
-    document.getElementById('game').appendChild(dbg);
-
     return { x: wx, y: wy, w: ww, h: wh };
   });
 
-  // check all pipes for collision or score trigger
+  // check pipes for collision or score trigger
   for (let pipe of pipes) {
     const obs = {
       x: +pipe.botEl.getAttribute('x'),
@@ -387,8 +375,8 @@ function checkCollision() {
     for (let box of worldBoxes) {
       // check collision
       if (overlaps(box, obs) || overlaps(box, topObs)) {
-        console.log('💥 collision on sub-box');
-        squishSound.currentTime = 0; // rewind if it's still playing
+        //console.log('boom');
+        squishSound.currentTime = 0;
         squishSound.play();
         return pauseGame();
       }
@@ -403,7 +391,7 @@ function checkCollision() {
     pipe.lineEl.dataset.crossed = 'true';
     score++;
     scoreDisplay.textContent = 'Score: ' + score;
-    pointSound.currentTime = 0; // rewind if it's still playing
+    pointSound.currentTime = 0;
     pointSound.play();
     } else if (!hasHitLine) {
       pipe.lineEl.dataset.crossed = 'false';

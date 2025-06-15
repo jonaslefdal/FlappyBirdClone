@@ -2,7 +2,6 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: black;
 }
 
 .main1 {
@@ -20,7 +19,6 @@ html, body {
   align-items: center;
   overflow: hidden;
 }
-
 
 svg#game {
   width: 800px;
@@ -43,8 +41,8 @@ svg#game {
   align-items: center;
   text-align: center;
   user-select: none;
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none;     /* IE/Edge */
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 #gameOverOverlay .overlay-text p {
@@ -62,9 +60,9 @@ svg#game {
   top: 12%;
   left: 50%;
   font-size: 24px;
-  color: red;      /* or white, depending on your bg */
+  color: red;
   z-index: 10;
   user-select: none;
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none;     /* IE/Edge */
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
