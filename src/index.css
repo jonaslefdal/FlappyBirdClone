@@ -1,0 +1,70 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: black;
+}
+
+.main1 {
+  width: 100%;
+  height: 100%;
+}
+
+.game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+
+svg#game {
+  width: 800px;
+  height: 600px;
+  display: block;
+  background: white;
+}
+
+#gameOverOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none;     /* IE/Edge */
+}
+
+#gameOverOverlay .overlay-text p {
+  margin: 0.5em 0;
+    font-size: 1.5rem;
+}
+#gameOverOverlay h1 {
+  margin: 0.5em 0;
+    font-size: 2rem;
+}
+
+#score {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 12%;
+  left: 50%;
+  font-size: 24px;
+  color: red;      /* or white, depending on your bg */
+  z-index: 10;
+  user-select: none;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none;     /* IE/Edge */
+}
