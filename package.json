@@ -9,17 +9,15 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "dev": "vite",
+    "build:web": "vite build --config vite.web.config.ts"
   },
   "keywords": [],
   "author": {
     "name": "Jonas Lefdal",
     "email": "jonas.lefdal@gmail.com"
   },
-  "scripts": {
-  "dev": "vite",
-  "build:web": "vite build --config vite.web.config.ts"
-},
   "license": "MIT",
   "devDependencies": {
     "@electron-forge/cli": "^7.8.1",
