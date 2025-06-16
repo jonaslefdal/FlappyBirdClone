@@ -3,20 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <title>Flappy Benji</title>
+      <link rel="icon" type="image/x-icon" href="/pipe-benji.png">
 
   </head>
   <body>
 
     <div id="score">Score: 0</div>
+        <div id="lastScore">Last Score: 0</div>
+        <div id="bestScore">Best Score: 0</div>
+    <label class="switch">
+      <input type="checkbox" id="toggleBenji">
+      <span class="slider round"></span>
+    </label>
+    <span id="toggleLabel">Benji Mode</span>
 <div class="game-container">
 
   <svg id="game" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
-    <image
-      href="background.png"
-      x="0" y="0"
-      width="800" height="600"
-      preserveAspectRatio="none"
-    />
+      <image
+        id="backgroundImage"
+        href="background.png"
+        x="0" y="0"
+        width="800" height="600"
+        preserveAspectRatio="none"
+      />
     <rect x="0" y="0" width="800" height="10" fill="transparent" />
 
     <g id="ball" transform="translate(100,100)">
@@ -50,13 +59,22 @@
           <polygon style="fill:#D9C37C;" points="486.236,87.476 462.82,83.587 464.572,98.448 487.239,102.221 508.721,114.868"/>
         </g>
       </g>
+            <image
+        id="benjiOverlay"
+        href="bird-benji.png"
+        x="0"
+        y="-80"
+        width="600"
+        height="600"
+        style="display: none; z-index: 20;"
+      />
     </g>
 
   </svg>
     <div id="gameOverOverlay">
       <div class="overlay-text">
-        <h1>💀 Drrreead! Klikk for å spille igjen</h1>
-        <p>Spacebar to respawn</p>
+        <h1>💀 Drrreead! Click to play again</h1>
+        <p>Made by Benji for Benji</p>
       </div>
     </div>
 </div>
@@ -65,6 +83,26 @@
 </html>
 
 <script>
+  let benjiMode = false;
+  const overlay = document.getElementById("benjiOverlay");
+
+  const background = document.getElementById("backgroundImage");
+  document.getElementById("toggleBenji").addEventListener("click", () => {
+    benjiMode = !benjiMode;
+    overlay.style.display = benjiMode ? "inline" : "none";
+
+    // Update pipe textures
+    const newPipeSrc = benjiMode ? 'pipe-benji.png' : 'pipe.png';
+    for (let pipe of pipes) {
+      pipe.topEl.setAttributeNS('http://www.w3.org/1999/xlink', 'href', newPipeSrc);
+      pipe.botEl.setAttributeNS('http://www.w3.org/1999/xlink', 'href', newPipeSrc);
+    }
+
+    // Update background
+    const bgSrc = benjiMode ? 'background-benji.png' : 'background.png';
+    background.setAttribute('href', bgSrc);
+  });
+
   const pointSound = new Audio('ding.mp3');
   pointSound.volume = 0.3; 
 
@@ -77,6 +115,9 @@
 const bird = document.getElementById("ball");
 
 let score = 0;
+let lastScore = 0;
+let bestScore = parseInt(localStorage.getItem('bestScore')) || 0;
+document.getElementById('bestScore').textContent = 'Best Score: ' + bestScore;
 const scoreDisplay = document.getElementById('score');
 const scoreLine    = document.getElementById('scoreLine');
 let gravityId, moveId, movementId;
@@ -103,7 +144,7 @@ function applyGravity() {
   y += velocityY;
 
   const bbox = bird.getBBox();
-  const birdHeight = bbox.height * scale;
+  const birdHeight = 450 * scale;
 
   // Collision with bottom
   if (y + birdHeight > height) {
@@ -148,7 +189,8 @@ function toggleMovement(direction) {
 }
 
 window.addEventListener("mousedown", (e) => {
-  if (e.button === 0) {
+  const isToggle = e.target.closest('#toggleBenji') || e.target.closest('.switch');
+  if (e.button === 0 && !isToggle) {
     toggleMovement("up");
   }
 });
@@ -181,15 +223,26 @@ window.addEventListener("keyup", (e) => {
 function pauseGame() {
   paused = true;
   document.getElementById("gameOverOverlay").style.display = "flex";
+
+  lastScore = score;
+  document.getElementById('lastScore').textContent = 'Last Score: ' + lastScore;
+
+  if (score > bestScore) {
+    bestScore = score;
+    localStorage.setItem('bestScore', bestScore);
+  }
+  document.getElementById('bestScore').textContent = 'Best Score: ' + bestScore;
 }
 
 function restartGame() {
   cancelAnimationFrame(gravityId);
   cancelAnimationFrame(moveId);
   cancelAnimationFrame(movementId);
+
   // reset the score
   score = 0;
   scoreDisplay.textContent = 'Score: ' + score;
+
 
   // reset bird
   x = 100;
@@ -232,7 +285,9 @@ for (let i = 0; i < NUM_PIPES; i++) {
 
 function createPipeImage(type) {
   const img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-  img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'pipe.png');
+  const pipeSrc = benjiMode ? 'pipe-benji.png' : 'pipe.png';
+
+  img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', pipeSrc);
   img.setAttribute('width', '80');  
   img.setAttribute('height', '400'); 
   img.setAttribute('y', type === 'top' ? '0' : '200'); 
@@ -311,7 +366,7 @@ const localHitboxes = [
 
   { x: 400, y:  60, w:  80, h:  80 },
 
-  { x: 280, y: 260, w: 180, h: 140 },
+  { x: 280, y: 260, w: 70, h: 140 },
 
   { x: 200, y: 340, w: 140, h:  90 },
 
@@ -325,7 +380,7 @@ const localHitboxes = [
 
   { x: 340, y: 10, w: 100, h:  90 },
 
-  { x: 320, y: 350, w: 100, h:  80 }
+  { x: 320, y: 350, w: 80, h:  80 }
 ];
 
 function checkCollision() {

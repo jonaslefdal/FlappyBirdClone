@@ -57,12 +57,102 @@ svg#game {
 #score {
   position: absolute;
   transform: translate(-50%, -50%);
-  top: 12%;
+  top: 13%;
   left: 50%;
   font-size: 24px;
-  color: red;
+  color: white;
   z-index: 10;
   user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+#lastScore {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 30%;
+  left: 22%;
+  font-size: 24px;
+  color: white;
+  z-index: 10;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+#bestScore {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 70%;
+  left: 22%;
+  font-size: 24px;
+  color: white;
+  z-index: 10;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.switch {
+  position: absolute;
+  top: 89%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  z-index: 10;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  transition: 0.4s;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 34px;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 26px;
+  width: 26px;
+  background-color: white;
+  left: 4px;
+  bottom: 4px;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #66bb6a;
+}
+
+input:checked + .slider::before {
+  transform: translateX(26px);
+}
+
+#toggleLabel {
+  position: absolute;
+  top: 89%;
+  left: 45.5%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  color: white;
+  z-index: 10;
+  font-family: sans-serif;
+    user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
 }
